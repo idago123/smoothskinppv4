@@ -731,8 +731,8 @@
   }
 
   .pp-card--featured .pp-card-img {
-    width: 80px;
-    height: 77px;
+    width: 85px;
+    height: 82px;
     object-fit: contain;
     object-position: left center;
   }
@@ -792,8 +792,8 @@
   }
 
   .pp-cards-row .pp-card-img {
-    width: 51px;
-    height: 77px;
+    width: 56px;
+    height: 82px;
     object-fit: contain;
     object-position: left center;
   }
@@ -967,24 +967,24 @@
 
   /* Figma 277:86 / 277:93 / 277:117 — bottle image slots */
   .pp-card--featured .pp-card-img {
-    width: 61px;
-    height: 58.79px;
+    width: 66px;
+    height: 63.79px;
     object-fit: contain;
     object-position: left center;
   }
 
   .pp-cards-row .pp-card-img {
-    height: 58.79px;
+    height: 63.79px;
     object-fit: contain;
     object-position: left center;
   }
 
   .pp-cards-row .pp-card:first-child .pp-card-img {
-    width: 39px;
+    width: 44px;
   }
 
   .pp-cards-row .pp-card:last-child .pp-card-img {
-    width: 17px;
+    width: 22px;
   }
 
   .pp-cards-row .pp-card-title {
@@ -1134,12 +1134,12 @@
 .pp-card-img {
   flex-shrink: 0;
   width: auto;
-  height: 59px;
+  height: 64px;
   object-fit: contain;
 }
 .pp-card--featured .pp-card-img {
-  height: 59px;
-  width: 61px;
+  height: 64px;
+  width: 66px;
   object-fit: contain;
   object-position: left center;
 }

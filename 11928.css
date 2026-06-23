@@ -581,7 +581,7 @@
   .pp-panel {
     margin-left: -17px;
     margin-right: -17px;
-    padding: 0 17px 16px;
+    padding: 24px 17px 16px;
     background: #fff;
   }
 }
@@ -893,7 +893,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-top: 16px;
+  margin-top: 8px;
 }
 @media (min-width: 768px) {
   .pp-cards {
@@ -1400,10 +1400,14 @@
 /* Figma 277:140 / 258:1901 — same ratios on mobile (43px) and desktop (57px) */
 .pp-freebie-icon--product {
   display: block;
-  width: 100%;
-  height: 100%;
+  width: 57px;
+  height: 57px;
   object-fit: contain;
   object-position: center;
+}
+
+.dfw {
+  background: none !important;
 }
 
 .pp-freebie-icon--shipping {
@@ -1415,21 +1419,23 @@
 }
 
 @media (max-width: 1023px) {
-  /* Figma 277:138 / 277:140 — 43px circle, bottle 9.886×34.848px @ 30° */
+  .pp-freebie-icon-wrap--product.dfw {
+    overflow: visible;
+  }
+
+  .dfw .pp-freebie-icon--product {
+    width: 43px;
+    height: 43px;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  /* Figma 277:138 / 277:140 — 43px circle, bottle @ 30° */
   .pp-freebie-icon-rotate {
     left: 21.05%;
     top: 12.28%;
     width: 60.43%;
     height: 81.68%;
-  }
-
-  .pp-freebie-icon--product {
-    flex-shrink: 0;
-    width: 9.89px;
-    height: 34.85px;
-    object-fit: cover;
-    object-position: center;
-    transform: none;
   }
 
   .pp-freebie-icon--shipping {
@@ -3448,6 +3454,8 @@
     top: -0.04%;
     width: 100.01%;
     height: 106.92%;
+    object-fit: cover;
+    object-position: center center;
   }
 
   .tms-ingredients__routine-media picture::after {
@@ -4129,9 +4137,13 @@
     font-size: 17px;
     padding: 0 19px 0 24px;
   }
+  .anti-aging-cocktail__card-image--wrinkles .anti-aging-cocktail__card-title {
+    font-size: 16px;
+  }
   .anti-aging-cocktail__card-text {
     font-size: 16px; /* 18px icon overlap + 13px gap */
     padding: 31px 20px 24px;
+    text-align: left;
   }
   .anti-aging-cocktail__checkmark-icon {
     width: 20px;
@@ -4434,7 +4446,7 @@
   }
   /* Figma 277:20 — 17px left inset, 16px right, 53px bottom */
   .skin-routine__container {
-    padding: 44px 16px 53px 17px;
+    padding: 44px 16px 20px 17px;
   }
   .skin-routine__heading {
     font-size: 24px;
@@ -4606,9 +4618,10 @@
   z-index: 1;
 }
 .skin-transformation__card-header {
+  position: relative;
   background-color: #027386;
-  min-height: 98px;
-  padding: 16px 20px 20px;
+  min-height: auto;
+  padding: 20px 20px 36px;
   border-radius: 15px 15px 0 0;
   text-align: center;
 }
@@ -4618,9 +4631,14 @@
   font-size: 35px;
   line-height: 1.18;
   color: #ffffff;
-  margin: 0 0 12px;
+  margin: 0;
 }
 .skin-transformation__pill {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  z-index: 2;
+  transform: translate(-50%, 50%);
   display: inline-block;
   background-color: #eaeaea;
   border-radius: 25px;
@@ -4630,9 +4648,10 @@
   font-size: 23px;
   line-height: 1.18;
   color: #027386;
+  white-space: nowrap;
 }
 .skin-transformation__card-body {
-  padding: 24px 41px 32px;
+  padding: 40px 41px 32px;
 }
 .skin-transformation__tagline {
   font-family: 'Poppins', sans-serif;
@@ -4807,8 +4826,11 @@
     font-size: 18px;
     padding: 8px 24px;
   }
+  .skin-transformation__card-header {
+    padding-bottom: 31px;
+  }
   .skin-transformation__card-body {
-    padding: 20px 24px 28px;
+    padding: 36px 24px 28px;
   }
   .skin-transformation__grid {
     grid-template-columns: repeat(15, 34px);
@@ -4877,12 +4899,12 @@
     margin: 0 auto;
   }
   .skin-transformation__card-header {
-    min-height: 55px;
-    padding: 12px 16px 32px;
+    min-height: auto;
+    padding: 14px 16px 26px;
   }
   .skin-transformation__card-title {
     font-size: 20px;
-    margin-bottom: 8px;
+    margin-bottom: 0;
   }
   .skin-transformation__pill {
     font-size: 17px;
@@ -4892,7 +4914,7 @@
     line-height: 1.18;
   }
   .skin-transformation__card-body {
-    padding: 16px clamp(12px, 3.5vw, 22px) 24px;
+    padding: 30px clamp(12px, 3.5vw, 22px) 24px;
   }
   .skin-transformation__tagline {
     font-family: 'Plus Jakarta Sans', sans-serif;

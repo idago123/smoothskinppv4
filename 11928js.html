@@ -1,0 +1,240 @@
+<script>
+/* =========================================================================
+   Product Picker — one-time purchase PDP
+   ========================================================================= */
+(function () {
+  var picker = document.querySelector('[data-product-picker]');
+  if (!picker) return;
+
+  /* ---- Carousel -------------------------------------------------------- */
+  var track = picker.querySelector('[data-carousel-track]');
+  var prevBtn = picker.querySelector('[data-carousel-prev]');
+  var nextBtn = picker.querySelector('[data-carousel-next]');
+  var thumbContainer = picker.querySelector('[data-carousel-thumbs]');
+  var thumbs = thumbContainer
+    ? thumbContainer.querySelectorAll('[data-carousel-thumb]')
+    : [];
+  var slides = track ? track.querySelectorAll('.pp-slide') : [];
+  var slideCount = slides.length;
+  var currentSlide = 0;
+
+  function goToSlide(index) {
+    if (slideCount === 0) return;
+    if (index < 0) index = slideCount - 1;
+    if (index >= slideCount) index = 0;
+    currentSlide = index;
+
+    for (var i = 0; i < slides.length; i++) {
+      slides[i].classList.toggle('is-active', i === currentSlide);
+    }
+
+    for (var j = 0; j < thumbs.length; j++) {
+      thumbs[j].classList.toggle('is-active', j === currentSlide);
+    }
+
+    scrollActiveThumbIntoView();
+  }
+
+  // Slide the thumbnail strip so the active thumb is centered/visible,
+  // without changing thumbnail size or spacing. Relies on the container's
+  // CSS `scroll-behavior: smooth` for the animation.
+  function scrollActiveThumbIntoView() {
+    if (!thumbContainer || !thumbs[currentSlide]) return;
+
+    var activeThumb = thumbs[currentSlide];
+    var containerRect = thumbContainer.getBoundingClientRect();
+    var thumbRect = activeThumb.getBoundingClientRect();
+    var delta =
+      thumbRect.left -
+      containerRect.left -
+      (containerRect.width - thumbRect.width) / 2;
+
+    var maxScroll = thumbContainer.scrollWidth - thumbContainer.clientWidth;
+    var target = thumbContainer.scrollLeft + delta;
+    if (target < 0) target = 0;
+    if (target > maxScroll) target = maxScroll;
+
+    thumbContainer.scrollLeft = target;
+  }
+
+  if (prevBtn)
+    prevBtn.addEventListener('click', function () {
+      goToSlide(currentSlide - 1);
+    });
+  if (nextBtn)
+    nextBtn.addEventListener('click', function () {
+      goToSlide(currentSlide + 1);
+    });
+  for (var t = 0; t < thumbs.length; t++) {
+    (function (idx) {
+      thumbs[idx].addEventListener('click', function () {
+        goToSlide(idx);
+      });
+    })(t);
+  }
+
+  /* ---- Package selection ----------------------------------------------- */
+  var variantCards = picker.querySelectorAll('[data-buy-url]');
+  var ctaButton = picker.querySelector('[data-cta-button]');
+  var freebieItems = picker.querySelectorAll('[data-freebie]');
+
+  /* 1 = 3 bottles | 2 = 2 bottles | 3 = 1 bottle — one-time purchase tiers */
+  var freebieRules = {
+    1: { 'face-wash': true, shipping: true },
+    2: { 'face-wash': false, shipping: true },
+    3: { 'face-wash': false, shipping: false },
+  };
+
+  function updateFreebies(variantIndex) {
+    var rules = freebieRules[variantIndex] || freebieRules[3];
+    freebieItems.forEach(function (item) {
+      var key = item.getAttribute('data-freebie');
+      var included = Boolean(rules[key]);
+      item.classList.toggle('is-locked', !included);
+    });
+  }
+
+  function selectCard(card) {
+    variantCards.forEach(function (c) {
+      var isThis = c === card;
+      c.classList.toggle('is-active', isThis);
+      c.setAttribute('aria-pressed', isThis ? 'true' : 'false');
+    });
+
+    if (ctaButton)
+      ctaButton.setAttribute('href', card.getAttribute('data-buy-url'));
+    updateFreebies(Number(card.getAttribute('data-variant-index')));
+  }
+
+  variantCards.forEach(function (card) {
+    card.addEventListener('click', function () {
+      selectCard(this);
+    });
+  });
+
+  /* Sync CTA + freebies with whichever card is active on load */
+  var initialCard =
+    picker.querySelector('[data-buy-url][aria-pressed="true"]') ||
+    variantCards[0];
+  if (initialCard) {
+    if (ctaButton)
+      ctaButton.setAttribute('href', initialCard.getAttribute('data-buy-url'));
+    updateFreebies(Number(initialCard.getAttribute('data-variant-index')));
+  }
+
+  /* ---- Accordions ------------------------------------------------------ */
+  var PLUS_SVG =
+    '<svg viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 0L9 17M0 8H17" stroke="black" stroke-width="2"/></svg>';
+  var MINUS_SVG =
+    '<svg viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 8H17" stroke="black" stroke-width="2"/></svg>';
+
+  var accordions = picker.querySelectorAll('[data-accordion]');
+  accordions.forEach(function (accordion) {
+    var header = accordion.querySelector('[data-accordion-header]');
+    var content = accordion.querySelector('[data-accordion-content]');
+    var iconWrap = accordion.querySelector('[data-accordion-icon]');
+    if (!header || !content) return;
+
+    header.addEventListener('click', function () {
+      var isOpen = content.classList.contains('is-open');
+
+      if (isOpen) {
+        content.classList.remove('is-open');
+        header.setAttribute('aria-expanded', 'false');
+        if (iconWrap) iconWrap.innerHTML = PLUS_SVG;
+      } else {
+        content.classList.add('is-open');
+        header.setAttribute('aria-expanded', 'true');
+        if (iconWrap) iconWrap.innerHTML = MINUS_SVG;
+      }
+    });
+  });
+})();
+
+/* =========================================================================
+   Testimonials carousel — mobile dot navigation
+   ========================================================================= */
+(function () {
+  var section = document.querySelector('[data-testimonials]');
+  if (!section) return;
+
+  var track = section.querySelector('[data-testimonials-track]');
+  var dots = section.querySelectorAll('[data-testimonial-dot]');
+  var cards = track ? track.querySelectorAll('.tms-testimonial-card') : [];
+  if (!track || cards.length === 0) return;
+
+  function setActiveDot(index) {
+    for (var i = 0; i < dots.length; i++) {
+      dots[i].classList.toggle('is-active', i === index);
+    }
+  }
+
+  function getLeadingInset() {
+    return window.matchMedia('(max-width: 1023px)').matches ? 17 : 0;
+  }
+
+  function scrollToCard(index) {
+    if (index < 0 || index >= cards.length) return;
+    var card = cards[index];
+    var target = card.offsetLeft - track.offsetLeft - getLeadingInset();
+    track.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
+    setActiveDot(index);
+  }
+
+  for (var d = 0; d < dots.length; d++) {
+    (function (idx) {
+      dots[idx].addEventListener('click', function () {
+        scrollToCard(idx);
+      });
+    })(d);
+  }
+
+  track.addEventListener(
+    'scroll',
+    function () {
+      var scrollLeft = track.scrollLeft;
+      var leadingInset = getLeadingInset();
+      var activeIndex = 0;
+      for (var c = 0; c < cards.length; c++) {
+        var cardStart = cards[c].offsetLeft - track.offsetLeft - leadingInset;
+        if (cardStart <= scrollLeft + 20) {
+          activeIndex = c;
+        }
+      }
+      setActiveDot(activeIndex);
+    },
+    { passive: true },
+  );
+})();
+</script>
+  <script>
+    (function () {
+      var grid = document.getElementById('skin-transformation-grid');
+      if (!grid) return;
+      var milestones = { 1: 1, 14: 1, 30: 1, 60: 1, 90: 1 };
+      for (var day = 1; day <= 90; day++) {
+        var cell = document.createElement('div');
+        cell.className = 'skin-transformation__day' + (milestones[day] ? ' skin-transformation__day--milestone' : '');
+        cell.setAttribute('data-day', day);
+        cell.innerHTML = '<span class="skin-transformation__day-num">' + day + '</span>' +
+          (milestones[day] ? '<img class="skin-transformation__day-star' + (day === 90 ? ' skin-transformation__day-star--teal' : '') + '" src="https://sun-coast-sciences.imgix.net/thesmoothskinsecret-ppv4/milestone-star.svg" alt="" aria-hidden="true">' : '');
+        grid.appendChild(cell);
+      }
+    })();
+  </script>
+
+  <script>
+    (function () {
+      var items = document.querySelectorAll('.pdp-faq__item');
+      items.forEach(function (item) {
+        item.addEventListener('click', function () {
+          var expanded = item.getAttribute('aria-expanded') === 'true';
+          var answer = document.getElementById(item.getAttribute('aria-controls'));
+          item.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+          if (answer) {
+            answer.hidden = expanded;
+          }
+        });
+      });
+    })();
+  </script>

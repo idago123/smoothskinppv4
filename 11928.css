@@ -571,6 +571,7 @@
 @media (max-width: 767px) {
   .pp-container {
     padding-bottom: 0;
+    padding-top: 20px;
   }
 
   .product-picker {
@@ -1334,7 +1335,7 @@
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  transform: rotate(30deg);
+  transform: rotate(15deg);
   transform-origin: center center;
 }
 
@@ -1423,11 +1424,11 @@
     overflow: visible;
   }
 
-  .dfw .pp-freebie-icon--product {
-    width: 43px;
-    height: 43px;
-    object-fit: contain;
-    object-position: center;
+  .pp-freebie-icon--product {
+    /* width: 43px; */
+    height: 47px;
+    /* object-fit: contain;
+    object-position: center; */
   }
 
   /* Figma 277:138 / 277:140 — 43px circle, bottle @ 30° */
@@ -2580,6 +2581,10 @@
 
   .tms-aging-signs__media {
     background: var(--pp-mobile-page-bg, #fff9f6);
+  }
+
+  .tms-aging-signs__media img {
+    object-position: right top;
   }
 
   .tms-aging-signs__layout {

@@ -1508,6 +1508,11 @@
   color: var(--pp-gray, #8d8d8d);
 }
 
+.pp-freebie-item.is-locked .pp-freebie-title .pp-emoji {
+  filter: grayscale(1);
+  opacity: 0.45;
+}
+
 .pp-freebie-item.is-locked .pp-freebie-desc {
   color: var(--pp-gray, #8d8d8d);
 }
@@ -1519,6 +1524,14 @@
 .pp-freebie-item.is-locked .pp-free-badge {
   border-color: var(--pp-gray-border, #8a8a8a);
   color: var(--pp-gray, #8d8d8d);
+}
+
+/* Header gift — grey only when every freebie is locked (1-bottle tier) */
+.pp-freebies:not(:has(.pp-freebie-item:not(.is-locked)))
+  .pp-freebies-header
+  .pp-emoji {
+  filter: grayscale(1);
+  opacity: 0.45;
 }
 
 @media (min-width: 1024px) {

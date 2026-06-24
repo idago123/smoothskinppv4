@@ -2588,7 +2588,7 @@
 
   /* Figma 2065:32 — 393×589 content block, fill #f4f4f4 (277:34) */
   .tms-aging-signs__content {
-    min-height: 589px;
+    /* min-height: 589px; */
     padding: 49px 18px 65px;
     background: var(--tms-section-bg, #f4f4f4);
   }
@@ -5020,7 +5020,7 @@
   position: relative;
   z-index: 1;
   max-width: 1170px;
-  padding: 62px 15px;
+  padding: 0 15px 62px;
 }
 .money-back-guarantee__inner {
   display: flex;
